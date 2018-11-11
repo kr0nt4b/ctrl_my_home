@@ -1,22 +1,7 @@
 #!/usr/bin/python
 import httplib, urllib
 import paho.mqtt.client as mqtt #import the client1
-import time
 from pushbullet import Pushbullet, PushError
-import logging
-import logging.handlers
-
-log = logging.getLogger(__name__)
-
-log.setLevel(logging.DEBUG)
-
-handler = logging.handlers.SysLogHandler(address = '/dev/log')
-
-#formatter = logging.Formatter('%(module)s.%(funcName)s: %(message)s')
-formatter = logging.Formatter('%(module)s: %(message)s')
-handler.setFormatter(formatter)
-
-log.addHandler(handler)
 
 def pushover1():
   conn = httplib.HTTPSConnection("api.pushover.net:443")
@@ -62,33 +47,12 @@ def on_message(client, userdata, message):
 
 def mqtt_connect():
   broker_address = "127.0.0.1"
-  log.debug("Broker address: %s" % broker_address)
   client = mqtt.Client("P1")
   client.on_message=on_message
-  log.debug("Connect to MQTT broker")
   client.connect(broker_address)
   client.subscribe("doorbell/in")
   return client
 
-
-def get_new_retry(retry):
-  if retry < 1800:
-    retry = retry * 2
-
-  log.info ("retry after %s seconds" % retry)
-
-  return retry
-
-def mqtt(retry):
-  try:
-    client = mqtt_connect()
-    client.loop_forever() 
-  except Exception as e:
-    log.error(e)
-    new_retry = get_new_retry(retry)
-    time.sleep(new_retry)
-    mqtt(new_retry)
-
 if __name__ == "__main__":
-  mqtt(30)
-
+  client = mqtt_connect()
+  client.loop_forever() 
