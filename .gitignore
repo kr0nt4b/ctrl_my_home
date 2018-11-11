@@ -100,3 +100,12 @@ ENV/
 # mypy
 .mypy_cache/
 .idea
+
+# custom
+pip*
+pushover
+wsdump.py
+easy_install
+easy_install-2.7
+chardetect
+man
