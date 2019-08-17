@@ -7,6 +7,7 @@ class DomoticzClient:
 
     def __init__(self, logger):
         self.base = "https://domoticz.totalize.nl/json.htm?username=a3IwbnQ0Ygo=&password=c2lsOEhlZWQK"
+        #self.on_off_cmd = self.base + "&type=command&param=switchlight&idx=%s&switchcmd=%s"
         self.logger = logger
 
     def get_device_info(self, idx):
@@ -41,6 +42,24 @@ class DomoticzClient:
         cmd = self.base + "&type=command&param=switchlight&idx=%s&switchcmd=%s" % (idx, on_off)
         response = self.send_get(cmd)
         self.logger.info("switch_light. response: %s" % response)
+
+    # def internal_speaker(self):
+    #     cmd = self.on_off_cmd % (48, "On")
+    #     print("internal_speaker. response: %s" % response)
+    #     response = self.send_get(cmd)
+    #     self.logger.info("switch to internal speaker. response: %s" % response)
+    #
+    # def external_speaker(self):
+    #     cmd = self.on_off_cmd % (48, "Off")
+    #     print("external_speaker. response: %s" % response)
+    #     response = self.send_get(cmd)
+    #     self.logger.info("switch to external speaker. response: %s" % response)
+    #
+    # def tv_off(self):
+    #     cmd = self.on_off_cmd % (62, "Off")
+    #     print("external_speaker. response: %s" % response)
+    #     response = self.send_get(cmd)
+    #     self.logger.info("tv switched off. response: %s" % response)
 
     @staticmethod
     def send_get(url):

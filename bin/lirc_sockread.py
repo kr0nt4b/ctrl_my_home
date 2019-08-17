@@ -5,7 +5,6 @@ import sys
 import os
 import time
 from Logging.LogClient import LogClient
-from Speaker.SwitchSpeaker import SwitchSpeaker
 from Domoticz.Domoticz import DomoticzClient
 
 log = LogClient("lirc_sockread")
@@ -56,16 +55,6 @@ while True:
         ir_cmd = "irsend -d %s SEND_ONCE %s %s" % (lirc_unix_sock, remote, button)
         exit_code = os.system(ir_cmd)
         log.info('cmd executed: %s. exit code: %s' % (ir_cmd, exit_code))
-
-    if remote == 'Marantz' and button == 'KEY_RECORDER2':
-        log.info('Marantz input set to: %s' % button)
-        speaker = SwitchSpeaker(log)
-        speaker.external()
-
-    if remote == 'Marantz_RC2000x' and button in ('KEY_POWER_OFF','KEY_TUNER', 'KEY_AUX', 'KEY_CD', 'KEY_RECORDER1', 'KEY_PHONO'):
-        log.info('Marantz_RC2000x input set to: %s' % button)
-        speaker = SwitchSpeaker(log)
-        speaker.internal()
 
     if remote == 'lights':
         if button == 'KEY_1':

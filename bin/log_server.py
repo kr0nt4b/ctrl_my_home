@@ -48,7 +48,7 @@ class LogServer:
     # Function for handling connections. This will be used to create threads
     def client_thread(self, connection):
         # Sending message to connected client
-        connection.send('connected\n')  # send only takes string
+        connection.send('Welcome to the logserver')  # send only takes string
 
         # infinite loop so that function do not terminate and thread do not end.
         while True:
