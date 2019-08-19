@@ -13,6 +13,12 @@ class Client:
             self.harmony_c.auto_reconnect = True
             self.config = self.harmony_c.get_config()
 
+    def start_activity(self, activity):
+        for config_item in self.config['activity']:
+            if config_item['label'] == activity:
+                self.harmony_c.start_activity(config_item['id'])
+                break
+
     def get_current_activity_name(self):
         activity = self.harmony_c.get_current_activity()
 
@@ -34,8 +40,11 @@ class Client:
         self.harmony_c.disconnect()
 
 
-if __name__ == "__main__":
-    client = Client('192.168.4.186')
-    client.send_amp_command('PowerOn')
-    client.send_amp_command('VolumeDown')
-    client.close()
+#if __name__ == "__main__":
+    #client = Client('192.168.4.186')
+    #client.start_activity("CD's Luisteren")
+    #client.start_activity("PowerOff")
+    #client.start_activity("Music")
+    #client.send_amp_command('PowerOn')
+    #client.send_amp_command('VolumeDown')
+    #client.close()

@@ -7,7 +7,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import os
 from Speaker.SwitchSpeaker import SwitchSpeaker
 from Logging.LogClient import LogClient
-from HarmonyChecker import HarmonyChecker
+from harmony.HarmonyChecker import HarmonyChecker
 from Kodi.Kodi import kodi_stop, kodi_start, radio_play
 import threading
 
@@ -24,7 +24,7 @@ class HttpHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self._set_headers()
         if self.path.startswith('/ab/current_activity'):
-            self.wfile.write(checker.get_last_activity() + "\n")
+            self.wfile.write(checker.get_last_activity())
 
         if self.path.startswith('/reboot'):
             os.system('reboot')
@@ -96,7 +96,7 @@ def run(server_class=HTTPServer, handler_class=HttpHandler, port=9999):
 
 
 def callback(activity):
-    print('Switched activity. New:' + activity)
+    log.info('Switched activity. New:' + activity)
     if activity != 'Music':
         speaker = SwitchSpeaker(log)
         speaker.internal()

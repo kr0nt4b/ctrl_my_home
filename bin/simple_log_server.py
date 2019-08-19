@@ -59,7 +59,18 @@ class LogServer:
             if not data:
                 break
 
-            self.logger.info(data)
+            tokens = data.split(' ')
+            if len(tokens) > 1:
+                level = data.split(' ')[1]
+                if level == 'DEBUG:':
+                    self.logger.debug(data)
+                if level == 'INFO:':
+                    self.logger.info(data)
+                if level == 'ERROR:':
+                    self.logger.error(data)
+            else:
+                self.logger.info(data)
+
             connection.sendall(reply)
 
         # came out of loop

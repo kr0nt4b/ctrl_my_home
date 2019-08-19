@@ -1,6 +1,7 @@
-from harmony.client import Client
+from bin.harmony.client import Client
 import time
 from threading import Thread
+import os
 
 ACTIVITY_FILE = '/tmp/harmony'
 
@@ -18,7 +19,7 @@ class HarmonyChecker(Thread):
     def write_current_activity(activity):
         timestamp = int(time.time())
         with open(ACTIVITY_FILE, 'w') as harmonyStateFile:
-            harmonyStateFile.write(str(timestamp) + ' ' + activity)
+            harmonyStateFile.write(str(timestamp) + '|' + activity)
 
     def get_last_activity(self):
         last_timestamp, last_activity = self.read_last_activity()
@@ -33,29 +34,33 @@ class HarmonyChecker(Thread):
 
     @staticmethod
     def read_last_activity():
-        with open(ACTIVITY_FILE, 'r') as reader:
-            line = reader.readline()
-            last_timestamp, last_activity = line.split(' ')
+        last_timestamp = None
+        last_activity = None
+
+        if os.path.exists(ACTIVITY_FILE):
+            with open(ACTIVITY_FILE, 'r') as reader:
+                line = reader.readline()
+                last_timestamp, last_activity = line.split('|')
 
         if last_timestamp is None:
             last_timestamp = 0
         if last_activity is None:
             last_activity = 'Unknown'
 
-        return last_timestamp, last_activity
+        return last_timestamp, str(last_activity)
 
     def start(self):
 
         self.log.info("start thread: run_harmony_checker")
         while True:
             self.activity = self.get_current_activity()
-
+            last_timestamp, last_activity = self.read_last_activity()
+            self.log.info("previous activity %s. New activity %s" % (last_activity, self.activity))
             if self.activity is None:
                 self.activity = 'PowerOff'
 
             self.write_current_activity(self.activity)
 
-            last_timestamp, last_activity = self.read_last_activity()
             if last_activity != self.activity:
                 self.callback(self.activity)
 

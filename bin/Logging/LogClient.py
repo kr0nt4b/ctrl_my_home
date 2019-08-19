@@ -39,6 +39,8 @@ class LogClient:
             print(e.strerror)
             self.connected = False
 
+    def error(self, message):
+        return self.send("%s ERROR: %s", message)
 
     def debug(self, message):
         return self.send("%s DEBUG: %s", message)
@@ -70,6 +72,6 @@ class LogClient:
 if __name__ == "__main__":
     log = LogClient("TEST")
     log.info("Hoi, daar")
-    log.info("Hoi, daar1")
-    log.info("Hoi, daar2")
+    log.debug("Hoi, daar1")
+    log.error("Hoi, daar2")
 
