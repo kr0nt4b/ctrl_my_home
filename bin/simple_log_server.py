@@ -16,18 +16,18 @@ LOG_FORMAT = '%(asctime)-15s %(message)s'
 SMART_LOG = '/var/log/smart/smarthome.log'
 
 
+def init_logging():
+    smart_log_path = os.path.dirname(SMART_LOG)
+    if not os.path.exists(os.path.dirname(smart_log_path)):
+        os.mkdir(smart_log_path)
+    logging.basicConfig(filename=SMART_LOG, level=logging.DEBUG, format=LOG_FORMAT)
+    return logging.getLogger('log_server')
+
+
 class LogServer:
 
-    @staticmethod
-    def init_logging():
-        smart_log_path = os.path.dirname(SMART_LOG)
-        if not os.path.exists(os.path.dirname(smart_log_path)):
-            os.mkdir(smart_log_path)
-        logging.basicConfig(filename=SMART_LOG, level=logging.DEBUG, format=LOG_FORMAT)
-        return logging.getLogger('log_server')
-
     def __init__(self):
-        self.logger = self.init_logging()
+        self.logger = init_logging()
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.logger.info('Socket created')
@@ -91,6 +91,7 @@ class LogServer:
 
 
 if __name__ == "__main__":
+
     log_server = LogServer()
     try:
         log_server.start()

@@ -7,6 +7,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import os
 from Speaker.SwitchSpeaker import SwitchSpeaker
 from Logging.LogClient import LogClient
+from harmony.Harmony import HarmonyClient
 from harmony.HarmonyChecker import HarmonyChecker
 from Kodi.Kodi import kodi_stop, kodi_start, radio_play
 import threading
@@ -73,6 +74,16 @@ class HttpHandler(BaseHTTPRequestHandler):
             cmd = 'echo "tx 2F:82:20:00" | cec-client RPI -s -d 4'
             os.system(cmd)
             log.info("tv to kodi")
+
+        if self.path == '/amp/volume_up':
+            harmony_client = HarmonyClient('192.168.88.186')
+            harmony_client.send_amp_command('VolumeUp')
+            harmony_client.close()
+
+        if self.path == '/amp/volume_down':
+            harmony_client = HarmonyClient('192.168.88.186')
+            harmony_client.send_amp_command('VolumeDown')
+            harmony_client.close()
 
     def do_HEAD(self):
         self._set_headers()

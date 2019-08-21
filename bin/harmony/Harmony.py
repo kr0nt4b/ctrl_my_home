@@ -2,7 +2,7 @@
 from pyharmony import client as harmony_client
 
 
-class Client:
+class HarmonyClient:
 
     harmony_c = None
 
@@ -41,7 +41,7 @@ class Client:
 
 
 #if __name__ == "__main__":
-    #client = Client('192.168.4.186')
+    #client = Client('192.168.88.186')
     #client.start_activity("CD's Luisteren")
     #client.start_activity("PowerOff")
     #client.start_activity("Music")

@@ -1,9 +1,9 @@
-from bin.harmony.client import Client
+from Harmony import HarmonyClient
 import time
 from threading import Thread
 import os
 
-ACTIVITY_FILE = '/tmp/harmony'
+ACTIVITY_FILE = '/tmp/harmony.state'
 
 
 class HarmonyChecker(Thread):
@@ -77,7 +77,7 @@ class HarmonyChecker(Thread):
 
     def get_current_activity(self):
         try:
-            harmony_client = Client('192.168.4.186')
+            harmony_client = HarmonyClient('192.168.88.186')
             self.activity = harmony_client.get_current_activity_name()
             harmony_client.close()
             self.log.debug('activity: ' + self.activity)
